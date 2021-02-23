@@ -383,6 +383,7 @@ export function importUri(workspaceId: string, uri: string, forceToWorkspace?: F
 const VALUE_JSON = 'json';
 const VALUE_YAML = 'yaml';
 const VALUE_HAR = 'har';
+const VALUE_POSTMAN = 'postman';
 
 function showSelectExportTypeModal(onCancel, onDone) {
   const lastFormat = window.localStorage.getItem('insomnia.lastExportFormat');
@@ -400,6 +401,7 @@ function showSelectExportTypeModal(onCancel, onDone) {
         value: VALUE_YAML,
       },
       { name: 'HAR – HTTP Archive Format', value: VALUE_HAR },
+      { name: 'Postman', value: VALUE_POSTMAN },
     ],
     message: 'Which format would you like to export as?',
     onCancel: onCancel,
@@ -498,6 +500,12 @@ export function exportWorkspacesToFile(workspaceId = null) {
               workspace,
               exportPrivateEnvironments,
               'yaml',
+            );
+          } else if (selectedFormat === VALUE_POSTMAN) {
+            stringifiedExport = await importUtils.exportWorkspacesData(
+              workspace,
+              exportPrivateEnvironments,
+              'json',
             );
           } else {
             stringifiedExport = await importUtils.exportWorkspacesData(
